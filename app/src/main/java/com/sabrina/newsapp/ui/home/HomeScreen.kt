@@ -45,11 +45,10 @@ fun HomeScreen(
                 .padding(paddingValues)
         ) {
             if (state.isLoading){
-                Box(
-                    modifier = Modifier.fillMaxSize(),
-                    contentAlignment = Alignment.Center
-                ) {
-                    CircularProgressIndicator(modifier = Modifier.size(48.dp))
+                LazyColumn {
+                    items(6) {
+                        ShimmerTrendingCard()
+                    }
                 }
             }else if (state.error != null){
                 Box(
