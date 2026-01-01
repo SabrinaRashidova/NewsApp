@@ -5,6 +5,6 @@ data class ArticleDto(
     val title: String,
     val abstract: String,
     val byline: String?,
-    val multimedia: List<MultimediaDto>?,
+    val media: List<MediaDto>?,
     val published_date: String
 )
