@@ -71,6 +71,13 @@ dependencies {
     implementation(libs.hilt.android)
     kapt(libs.hilt.compiler)
 
+    implementation(libs.coil.core)
+
+    implementation(libs.coil.compose)
+
+    implementation(libs.coil.svg)
+    implementation(libs.coil.gif)
+
     implementation(project(":data"))
     implementation(project(":domain"))
 }
