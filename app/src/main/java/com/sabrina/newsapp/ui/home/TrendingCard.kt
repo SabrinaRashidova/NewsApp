@@ -1,4 +1,4 @@
-package com.sabrina.newsapp.home
+package com.sabrina.newsapp.ui.home
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement

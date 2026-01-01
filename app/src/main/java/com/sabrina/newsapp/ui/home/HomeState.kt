@@ -1,4 +1,4 @@
-package com.sabrina.newsapp.home
+package com.sabrina.newsapp.ui.home
 
 import com.sabrina.domain.model.Article
 

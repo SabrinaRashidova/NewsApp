@@ -78,6 +78,9 @@ dependencies {
     implementation(libs.coil.svg)
     implementation(libs.coil.gif)
 
+    implementation("androidx.hilt:hilt-navigation-compose:1.2.0")
+
+
     implementation(project(":data"))
     implementation(project(":domain"))
 }
