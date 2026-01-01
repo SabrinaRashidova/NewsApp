@@ -18,11 +18,13 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.sabrina.domain.model.Article
 import com.sabrina.domain.repository.NewsRepository
+import com.sabrina.newsapp.navigation.NewsRouter
 import com.sabrina.newsapp.ui.theme.NewsAppTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -30,6 +32,7 @@ import com.sabrina.newsapp.ui.theme.NewsAppTheme
 fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel()
 ){
+    val context = LocalContext.current
     val state = viewModel.state
 
     Scaffold(
@@ -69,7 +72,9 @@ fun HomeScreen(
                     items(state.articles){article->
                         TrendingCard(
                             article = article,
-                            onClick = {println("Clicked on: ${article.title}")}
+                            onClick = {
+                                NewsRouter.openArticle(context,article.url)
+                            }
                         )
                     }
                 }
