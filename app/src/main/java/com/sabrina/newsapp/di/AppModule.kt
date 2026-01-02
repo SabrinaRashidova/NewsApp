@@ -1,6 +1,6 @@
 package com.sabrina.newsapp.di
 
-import com.sabrina.data.remote.NytApiService
+import com.sabrina.data.remote.NewsApiService
 import com.sabrina.data.repository.NewsRepositoryImpl
 import com.sabrina.domain.repository.NewsRepository
 import com.sabrina.newsapp.BuildConfig
@@ -38,18 +38,18 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideNytApi(client: OkHttpClient): NytApiService {
+    fun provideNytApi(client: OkHttpClient): NewsApiService {
         return Retrofit.Builder()
-            .baseUrl("https://api.nytimes.com/")
+            .baseUrl("https://newsapi.org/")
             .addConverterFactory(GsonConverterFactory.create())
             .client(client)
             .build()
-            .create(NytApiService::class.java)
+            .create(NewsApiService::class.java)
     }
 
     @Provides
     @Singleton
-    fun provideNewsRepository(api: NytApiService) : NewsRepository{
+    fun provideNewsRepository(api: NewsApiService) : NewsRepository{
         return NewsRepositoryImpl(api)
     }
 }
