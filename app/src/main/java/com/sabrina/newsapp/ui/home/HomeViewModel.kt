@@ -5,8 +5,16 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
+import com.sabrina.data.paging.NewsPagingSource
+import com.sabrina.data.remote.NytApiService
+import com.sabrina.domain.model.Article
 import com.sabrina.domain.repository.NewsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -17,6 +25,9 @@ class HomeViewModel @Inject constructor(
 
     var state by mutableStateOf(HomeState())
         private set
+
+    val articlePagingFlow: Flow<PagingData<Article>> = repository.getPagedNews().cachedIn(viewModelScope)
+
 
     init {
         getTrendingNews()

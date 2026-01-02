@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
@@ -12,6 +14,15 @@ android {
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         consumerProguardFiles("consumer-rules.pro")
+
+        val localProperties = Properties()
+        val localPropertiesFile = rootProject.file("local.properties")
+        if (localPropertiesFile.exists()) {
+            localProperties.load(localPropertiesFile.inputStream())
+        }
+
+        val apiKey = localProperties.getProperty("NYT_API_KEY") ?: ""
+        buildConfigField("String", "NYT_API_KEY", "\"$apiKey\"")
     }
 
     buildTypes {
@@ -30,6 +41,9 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
+    buildFeatures{
+        buildConfig = true
+    }
 }
 
 dependencies {
@@ -44,6 +58,9 @@ dependencies {
     implementation(libs.retrofit.core)
     implementation(libs.retrofit.gson)
     implementation(libs.gson)
+
+    implementation("androidx.paging:paging-compose:3.3.0")
+    implementation("androidx.paging:paging-runtime:3.3.0")
 
     implementation(project(":domain"))
 }

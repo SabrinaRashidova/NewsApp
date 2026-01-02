@@ -82,7 +82,7 @@ fun TrendingCard(
                         color = Color.Gray
                     )
                     Text(
-                        text = article.publishedDate,
+                        text = article.publishedDate.toReadableDate(),
                         style = MaterialTheme.typography.labelSmall,
                         color = Color.Gray
                     )
@@ -91,3 +91,6 @@ fun TrendingCard(
         }
     }
 }
+
+fun String.toReadableDate(): String =
+    this.substringBefore("T")

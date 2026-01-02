@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -22,6 +23,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.paging.LoadState
+import androidx.paging.compose.collectAsLazyPagingItems
 import com.sabrina.domain.model.Article
 import com.sabrina.domain.repository.NewsRepository
 import com.sabrina.newsapp.navigation.NewsRouter
@@ -31,52 +34,65 @@ import com.sabrina.newsapp.ui.theme.NewsAppTheme
 @Composable
 fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel()
-){
+) {
     val context = LocalContext.current
-    val state = viewModel.state
+    val articles = viewModel.articlePagingFlow.collectAsLazyPagingItems()
 
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
-                title = { Text("Trending News") }
+                title = { Text("Daily News") }
             )
         }
-    ) {paddingValues ->
-        Column(
+    ) { paddingValues ->
+        Box(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
         ) {
-            if (state.isLoading){
-                LazyColumn {
-                    items(6) {
+            LazyColumn(
+                modifier = Modifier.fillMaxSize(),
+                contentPadding = PaddingValues(16.dp),
+                verticalArrangement = Arrangement.spacedBy(16.dp)
+            ) {
+                items(count = articles.itemCount) { index ->
+                    articles[index]?.let { article ->
+                        TrendingCard(
+                            article = article,
+                            onClick = {
+                                NewsRouter.openArticle(context, article.url)
+                            }
+                        )
+                    }
+                }
+
+                if (articles.loadState.append is LoadState.Loading) {
+                    item {
+                        Box(
+                            modifier = Modifier.fillMaxWidth().padding(16.dp),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            CircularProgressIndicator(modifier = Modifier.size(30.dp))
+                        }
+                    }
+                }
+            }
+
+            if (articles.loadState.refresh is LoadState.Loading) {
+                Column(modifier = Modifier.padding(16.dp)) {
+                    repeat(6) {
                         ShimmerTrendingCard()
                     }
                 }
-            }else if (state.error != null){
+            }
+
+            if (articles.loadState.refresh is LoadState.Error) {
+                val error = articles.loadState.refresh as LoadState.Error
                 Box(
                     modifier = Modifier.fillMaxSize(),
                     contentAlignment = Alignment.Center
                 ) {
-                    Text(
-                        text = state.error,
-                        color = MaterialTheme.colorScheme.error,
-                        modifier = Modifier.padding(16.dp)
-                    )
-                }
-            }else{
-                LazyColumn(
-                    contentPadding = PaddingValues(top = 8.dp, bottom = 8.dp),
-                    verticalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    items(state.articles){article->
-                        TrendingCard(
-                            article = article,
-                            onClick = {
-                                NewsRouter.openArticle(context,article.url)
-                            }
-                        )
-                    }
+                    Text(text = error.error.localizedMessage ?: "Unknown Error")
                 }
             }
         }
