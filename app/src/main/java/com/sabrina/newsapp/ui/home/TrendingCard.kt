@@ -1,5 +1,6 @@
 package com.sabrina.newsapp.ui.home
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -8,12 +9,17 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
@@ -30,6 +36,8 @@ import com.sabrina.newsapp.R
 @Composable
 fun TrendingCard(
     article: Article,
+    isBookmarked: Boolean,
+    onBookmarkClick: () -> Unit,
     onClick: () -> Unit
 ){
     Card(
@@ -74,18 +82,33 @@ fun TrendingCard(
                 Spacer(modifier = Modifier.height(8.dp))
                 Row(
                     modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.SpaceBetween
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Text(
-                        text = article.author ?: "Unknown",
-                        style = MaterialTheme.typography.labelSmall,
-                        color = Color.Gray
-                    )
-                    Text(
-                        text = article.publishedDate.toReadableDate(),
-                        style = MaterialTheme.typography.labelSmall,
-                        color = Color.Gray
-                    )
+                   Column(modifier = Modifier.weight(1f)) {
+                       Text(
+                           text = article.author ?: "Unknown",
+                           style = MaterialTheme.typography.labelSmall,
+                           color = Color.Gray
+                       )
+                       Text(
+                           text = article.publishedDate.toReadableDate(),
+                           style = MaterialTheme.typography.labelSmall,
+                           color = Color.Gray
+                       )
+                   }
+
+                    IconButton(onClick = onBookmarkClick) {
+                        Image(
+                            painter = if (isBookmarked){
+                                painterResource(R.drawable.bookmark_filled)
+                            }else{
+                                painterResource(R.drawable.bookmark_outlined)
+                            },
+                            contentDescription = "Bookmark",
+                            modifier = Modifier.size(24.dp)
+                        )
+                    }
                 }
             }
         }

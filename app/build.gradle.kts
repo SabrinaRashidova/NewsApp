@@ -99,6 +99,10 @@ dependencies {
     implementation("androidx.room:room-ktx:$room_version")
     kapt("androidx.room:room-compiler:$room_version")
 
+    implementation("androidx.lifecycle:lifecycle-runtime-compose:2.7.0")
+
+    implementation("androidx.navigation:navigation-compose:2.8.5")
+
 
     implementation(project(":data"))
     implementation(project(":domain"))

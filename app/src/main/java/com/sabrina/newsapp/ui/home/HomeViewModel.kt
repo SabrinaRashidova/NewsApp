@@ -11,6 +11,8 @@ import com.sabrina.domain.model.Article
 import com.sabrina.domain.repository.NewsRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -24,6 +26,8 @@ class HomeViewModel @Inject constructor(
 
     val articlePagingFlow: Flow<PagingData<Article>> = repository.getPagedNews().cachedIn(viewModelScope)
 
+    val savedArticles = repository.getSavedArticles()
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000),emptyList())
 
     init {
         getTrendingNews()
@@ -43,6 +47,17 @@ class HomeViewModel @Inject constructor(
                     isLoading = false,
                     error = "Could not fetch news. Check your connection."
                 )
+            }
+        }
+    }
+
+    fun onBookmarkClick(article: Article){
+        viewModelScope.launch {
+            val isAlreadySaved = savedArticles.value.any { it.url == article.url }
+            if (isAlreadySaved){
+                repository.deleteArticle(article)
+            }else{
+                repository.upsertArticle(article)
             }
         }
     }
