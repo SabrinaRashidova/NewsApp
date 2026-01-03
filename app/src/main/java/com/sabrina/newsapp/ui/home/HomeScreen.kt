@@ -41,8 +41,7 @@ import com.sabrina.newsapp.ui.theme.NewsAppTheme
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
-    viewModel: HomeViewModel = hiltViewModel(),
-    onNavigateToBookmarks: () -> Unit
+    viewModel: HomeViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
     val articles = viewModel.articlePagingFlow.collectAsLazyPagingItems()
@@ -54,14 +53,6 @@ fun HomeScreen(
         topBar = {
             CenterAlignedTopAppBar(
                 title = { Text("Daily News") },
-                actions = {
-                    IconButton(onClick = onNavigateToBookmarks) {
-                       androidx.compose.foundation.Image(
-                           painter = painterResource(R.drawable.bookmark_filled),
-                           contentDescription = "Go to Bookmarks"
-                       )
-                    }
-                }
             )
         }
     ) { paddingValues ->

@@ -93,8 +93,6 @@ dependencies {
     implementation(libs.androidx.paging.compose)
     implementation(libs.androidx.paging.runtime)
 
-    val room_version = "2.6.1"
-
     implementation(libs.androidx.room.runtime)
     implementation(libs.androidx.room.ktx)
     kapt(libs.androidx.room.compiler)
@@ -102,7 +100,6 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.compose)
 
     implementation(libs.androidx.navigation.compose)
-
 
     implementation(project(":data"))
     implementation(project(":domain"))
