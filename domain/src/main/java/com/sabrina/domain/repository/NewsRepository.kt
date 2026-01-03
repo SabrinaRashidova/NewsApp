@@ -8,4 +8,11 @@ interface NewsRepository {
     suspend fun getTrendingNews() : List<Article>
 
     fun getPagedNews() : Flow<PagingData<Article>>
+
+    suspend fun upsertArticle(article: Article)
+
+    suspend fun deleteArticle(article: Article)
+
+    fun getSavedArticles(): Flow<List<Article>>
+
 }

@@ -3,6 +3,7 @@ import java.util.Properties
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
+    id("kotlin-kapt")
 }
 
 android {
@@ -59,8 +60,17 @@ dependencies {
     implementation(libs.retrofit.gson)
     implementation(libs.gson)
 
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.compiler)
+
     implementation("androidx.paging:paging-compose:3.3.0")
     implementation("androidx.paging:paging-runtime:3.3.0")
+
+    val room_version = "2.6.1"
+
+    implementation("androidx.room:room-runtime:$room_version")
+    implementation("androidx.room:room-ktx:$room_version")
+    kapt("androidx.room:room-compiler:$room_version")
 
     implementation(project(":domain"))
 }

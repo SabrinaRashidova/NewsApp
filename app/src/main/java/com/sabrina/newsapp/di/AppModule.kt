@@ -1,5 +1,6 @@
 package com.sabrina.newsapp.di
 
+import com.sabrina.data.local.ArticleDao
 import com.sabrina.data.remote.NewsApiService
 import com.sabrina.data.repository.NewsRepositoryImpl
 import com.sabrina.domain.repository.NewsRepository
@@ -49,7 +50,7 @@ object AppModule {
 
     @Provides
     @Singleton
-    fun provideNewsRepository(api: NewsApiService) : NewsRepository{
-        return NewsRepositoryImpl(api)
+    fun provideNewsRepository(api: NewsApiService,dao: ArticleDao) : NewsRepository{
+        return NewsRepositoryImpl(api,dao)
     }
 }
