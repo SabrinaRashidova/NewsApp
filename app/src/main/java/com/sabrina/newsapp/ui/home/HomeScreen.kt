@@ -205,10 +205,6 @@ fun HomeScreen(
                 )
             }
 
-            if (articles.loadState.refresh is LoadState.Loading) {
-
-            }
-
             if (articles.loadState.refresh is LoadState.Error) {
                 val error = articles.loadState.refresh as LoadState.Error
                 Box(
