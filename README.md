@@ -2,7 +2,8 @@
 📰 Daily News App
 A modern, high-performance Android news application built with Jetpack Compose and Clean Architecture. This app fetches real-time news using the NewsAPI, supporting category filtering, keyword search, and offline bookmarks.
 
- Features
+ Features:
+ ---
 Real-time News Feed: Paginated list of latest stories using Paging 3.
 
 Dynamic Categories: Filter news by topics (Tech, Sports, Business, etc.) with a sticky header.
@@ -15,7 +16,8 @@ Modern UI: Built entirely with Jetpack Compose and Material 3 design tokens.
 
 Persistent Navigation: Bottom navigation for seamless switching between Home and Bookmarks.
 
- Tech Stack
+ Tech Stack:
+ ---
 Language: Kotlin
 
 UI Framework: Jetpack Compose
