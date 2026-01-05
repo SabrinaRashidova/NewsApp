@@ -21,12 +21,15 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavController
 import com.sabrina.newsapp.navigation.NewsRouter
 import com.sabrina.newsapp.ui.home.TrendingCard
+import java.net.URLEncoder
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BookmarkScreen(
+    navController: NavController,
     viewModel: BookmarkViewModel = hiltViewModel()
 ){
     val context = LocalContext.current
@@ -64,9 +67,8 @@ fun BookmarkScreen(
                         onBookmarkClick = {
                             viewModel.onBookmarkClick(article)
                         },
-                        onClick = {
-                            NewsRouter.openArticle(context,article.url)
-                        }
+                        onClick = {val encodedUrl = URLEncoder.encode(article.url, "UTF-8")
+                            navController.navigate("details/$encodedUrl")}
                     )
                 }
             }

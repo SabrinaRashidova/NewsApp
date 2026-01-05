@@ -20,7 +20,7 @@ fun SetupNavGraph(navController: NavHostController){
             HomeScreen(navController = navController)
         }
         composable(route = BottomBarScreen.Bookmarks.route) {
-            BookmarkScreen()
+            BookmarkScreen(navController = navController)
         }
         composable(
             route = "details/{url}",
