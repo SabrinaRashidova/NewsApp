@@ -7,6 +7,7 @@ import com.sabrina.data.local.ArticleDao
 import com.sabrina.data.local.ArticleDatabase
 import com.sabrina.data.mapper.toDomain
 import com.sabrina.data.paging.NewsPagingSource
+import com.sabrina.data.paging.SearchPagingSource
 import com.sabrina.data.remote.NewsApiService
 import com.sabrina.domain.model.Article
 import com.sabrina.domain.repository.NewsRepository
@@ -37,4 +38,11 @@ class NewsRepositoryImpl @Inject constructor(
     override suspend fun deleteArticle(article: Article) = articleDao.deleteArticle(article)
 
     override fun getSavedArticles(): Flow<List<Article>> = articleDao.getAllArticles()
+
+    override fun getSearchNews(query: String): Flow<PagingData<Article>> {
+        return Pager(
+            config = PagingConfig(pageSize = 20, prefetchDistance = 2),
+            pagingSourceFactory = { SearchPagingSource(api,query)}
+        ).flow
+    }
 }

@@ -11,9 +11,11 @@ import com.sabrina.domain.model.Article
 import com.sabrina.domain.repository.NewsRepository
 import com.sabrina.newsapp.ui.util.categories
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -30,9 +32,17 @@ class HomeViewModel @Inject constructor(
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000),emptyList())
 
     private val _selectedCategory = MutableStateFlow("general")
-    val articlePagingFlow = _selectedCategory.flatMapLatest { category->
-        repository.getPagedNews(category)
-    }.cachedIn(viewModelScope)
+
+    private val _searchQuery = MutableStateFlow("")
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val articlePagingFlow = combine(_selectedCategory,_searchQuery) { category, query->
+        if (query.isNotEmpty()){
+            repository.getSearchNews(query)
+        }else{
+            repository.getPagedNews(category)
+        }
+    }.flatMapLatest { it }.cachedIn(viewModelScope)
 
     init {
         getTrendingNews(state.selectedCategory)
@@ -60,6 +70,22 @@ class HomeViewModel @Inject constructor(
         _selectedCategory.value = newCategory.lowercase()
         state = state.copy(selectedCategory = newCategory)
         getTrendingNews(newCategory)
+    }
+
+    fun onSearchQueryChanged(newQuery: String){
+        state = state.copy(searchText = newQuery)
+    }
+
+    fun onSearchIconClicked(){
+        state = state.copy(isSearchWidgetOpened = !state.isSearchWidgetOpened)
+        if (!state.isSearchWidgetOpened){
+            onSearchQueryChanged("")
+            _searchQuery.value = ""
+        }
+    }
+
+    fun searchNews(query: String){
+        _searchQuery.value = query
     }
 
     fun onBookmarkClick(article: Article){

@@ -15,4 +15,6 @@ interface NewsRepository {
 
     fun getSavedArticles(): Flow<List<Article>>
 
+    fun getSearchNews(query: String) : Flow<PagingData<Article>>
+
 }
