@@ -34,7 +34,8 @@ Pagination: Paging 3
 
 Asynchronous Content: Kotlin Coroutines & Flow
 
-<img width="401" height="862" alt="image" src="https://github.com/user-attachments/assets/f9dbabc2-8579-4d09-8946-d794dc0f95f7" />
+<img width="401" height="862" alt="image" src="https://github.com/user-attachments/assets/f9dbabc2-8579-4d09-8946-d794dc0f95f7" /> <img width="401" height="796" alt="image" src="https://github.com/user-attachments/assets/3c21b404-2ac3-4705-8186-14d51e50e181" />
+
 
 
 
