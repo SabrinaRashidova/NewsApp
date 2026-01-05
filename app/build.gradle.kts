@@ -101,6 +101,8 @@ dependencies {
 
     implementation(libs.androidx.navigation.compose)
 
+    implementation(libs.accompanist.webview)
+
     implementation(project(":data"))
     implementation(project(":domain"))
 }

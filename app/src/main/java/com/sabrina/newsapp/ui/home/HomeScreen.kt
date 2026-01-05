@@ -32,15 +32,18 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.navigation.NavController
 import androidx.paging.LoadState
 import androidx.paging.compose.collectAsLazyPagingItems
 import com.sabrina.newsapp.R
 import com.sabrina.newsapp.navigation.NewsRouter
 import com.sabrina.newsapp.ui.search.SearchAppBar
+import java.net.URLEncoder
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun HomeScreen(
+    navController: NavController,
     viewModel: HomeViewModel = hiltViewModel()
 ) {
     val context = LocalContext.current
@@ -115,7 +118,8 @@ fun HomeScreen(
                                 article = article,
                                 isBookmarked = isBookmarked,
                                 onBookmarkClick = { viewModel.onBookmarkClick(article) },
-                                onClick = { NewsRouter.openArticle(context, article.url) },
+                                onClick = {val encodedUrl = URLEncoder.encode(article.url, "UTF-8")
+                                    navController.navigate("details/$encodedUrl")},
                                 modifier = Modifier.padding(horizontal = 16.dp)
                             )
                         }
@@ -145,7 +149,8 @@ fun HomeScreen(
                             article = article,
                             isBookmarked = isBookmarked,
                             onBookmarkClick = { viewModel.onBookmarkClick(article) },
-                            onClick = { NewsRouter.openArticle(context, article.url) },
+                            onClick = {val encodedUrl = URLEncoder.encode(article.url, "UTF-8")
+                        navController.navigate("details/$encodedUrl")},
                             modifier = Modifier.padding(horizontal = 16.dp)
                         )
                     }
