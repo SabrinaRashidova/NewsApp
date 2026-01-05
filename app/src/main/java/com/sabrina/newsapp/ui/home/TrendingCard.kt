@@ -38,7 +38,8 @@ fun TrendingCard(
     article: Article,
     isBookmarked: Boolean,
     onBookmarkClick: () -> Unit,
-    onClick: () -> Unit
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
 ){
     Card(
         modifier = Modifier

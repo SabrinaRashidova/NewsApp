@@ -9,6 +9,9 @@ interface NewsApiService {
     @GET("v2/top-headlines")
     suspend fun getTrendingStories(
         @Query("country") country: String = "us",
+        @Query("category") category: String = "general",
+        @Query("page") page: Int = 1,
+        @Query("pageSize") pageSize: Int = 20,
         @Query("apiKey") apiKey: String = BuildConfig.NYT_API_KEY
     ) : NewsResponseDto
 

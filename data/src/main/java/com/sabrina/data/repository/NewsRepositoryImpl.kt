@@ -17,18 +17,18 @@ class NewsRepositoryImpl @Inject constructor(
     private val api: NewsApiService,
     private val articleDao: ArticleDao
 ): NewsRepository {
-    override suspend fun getTrendingNews(): List<Article> {
-        return api.getTrendingStories().articles.map { it.toDomain() }
+    override suspend fun getTrendingNews(category: String): List<Article> {
+        return api.getTrendingStories(category = category).articles.map { it.toDomain() }
     }
 
-    override fun getPagedNews(): Flow<PagingData<Article>> {
+    override fun getPagedNews(category: String): Flow<PagingData<Article>> {
         return Pager(
             config = PagingConfig(
-                pageSize = 100,
-                prefetchDistance = 2,
+                pageSize = 20,
+                prefetchDistance = 5,
                 enablePlaceholders = false
             ),
-            pagingSourceFactory = { NewsPagingSource(api,"news")}
+            pagingSourceFactory = { NewsPagingSource(api,category)}
         ).flow
     }
 

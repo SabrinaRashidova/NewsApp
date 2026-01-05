@@ -5,9 +5,9 @@ import com.sabrina.domain.model.Article
 import kotlinx.coroutines.flow.Flow
 
 interface NewsRepository {
-    suspend fun getTrendingNews() : List<Article>
+    suspend fun getTrendingNews(category: String) : List<Article>
 
-    fun getPagedNews() : Flow<PagingData<Article>>
+    fun getPagedNews(category: String) : Flow<PagingData<Article>>
 
     suspend fun upsertArticle(article: Article)
 

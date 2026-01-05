@@ -9,9 +9,12 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import com.sabrina.domain.model.Article
 import com.sabrina.domain.repository.NewsRepository
+import com.sabrina.newsapp.ui.util.categories
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -23,21 +26,23 @@ class HomeViewModel @Inject constructor(
 
     var state by mutableStateOf(HomeState())
         private set
-
-    val articlePagingFlow: Flow<PagingData<Article>> = repository.getPagedNews().cachedIn(viewModelScope)
-
     val savedArticles = repository.getSavedArticles()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000),emptyList())
 
+    private val _selectedCategory = MutableStateFlow("general")
+    val articlePagingFlow = _selectedCategory.flatMapLatest { category->
+        repository.getPagedNews(category)
+    }.cachedIn(viewModelScope)
+
     init {
-        getTrendingNews()
+        getTrendingNews(state.selectedCategory)
     }
 
-    fun getTrendingNews(){
+    fun getTrendingNews(category: String){
         viewModelScope.launch {
             state = state.copy(isLoading = true, error = null)
             try {
-                val result = repository.getTrendingNews()
+                val result = repository.getTrendingNews(category.lowercase())
                 state = state.copy(
                     articles = result,
                     isLoading = false
@@ -45,10 +50,16 @@ class HomeViewModel @Inject constructor(
             }catch (e: Exception){
                 state = state.copy(
                     isLoading = false,
-                    error = "Could not fetch news. Check your connection."
+                    error = "Failed to load $category news"
                 )
             }
         }
+    }
+
+    fun onCategoryChanged(newCategory: String){
+        _selectedCategory.value = newCategory.lowercase()
+        state = state.copy(selectedCategory = newCategory)
+        getTrendingNews(newCategory)
     }
 
     fun onBookmarkClick(article: Article){

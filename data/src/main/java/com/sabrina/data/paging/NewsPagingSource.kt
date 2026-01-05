@@ -8,7 +8,7 @@ import com.sabrina.domain.model.Article
 
 class NewsPagingSource(
     private val apiService: NewsApiService,
-    private val query: String
+    private val category: String
 ) : PagingSource<Int, Article>(){
 
     override fun getRefreshKey(state: PagingState<Int, Article>): Int? {
@@ -21,9 +21,10 @@ class NewsPagingSource(
         val position = params.key ?: 1
 
         return try {
-            val response = apiService.searchArticles(
-                query = query,
+            val response = apiService.getTrendingStories(
+                category = category,
                 page = position,
+                pageSize = params.loadSize
             )
             val articles = response.articles.map { it.toDomain() }
 
