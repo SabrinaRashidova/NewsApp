@@ -15,6 +15,7 @@ Offline Bookmarks: Save articles locally using Room Database.
 Modern UI: Built entirely with Jetpack Compose and Material 3 design tokens.
 
 Persistent Navigation: Bottom navigation for seamless switching between Home and Bookmarks.
+Social: System-level sharing.
 
  Tech Stack:
  ---
