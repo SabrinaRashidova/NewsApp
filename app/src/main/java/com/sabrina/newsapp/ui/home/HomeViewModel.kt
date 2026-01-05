@@ -98,4 +98,8 @@ class HomeViewModel @Inject constructor(
             }
         }
     }
+
+    fun refreshAll(){
+        getTrendingNews(state.selectedCategory)
+    }
 }

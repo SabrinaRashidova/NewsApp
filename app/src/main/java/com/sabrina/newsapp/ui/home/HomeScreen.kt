@@ -22,6 +22,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
+import androidx.compose.material3.pulltorefresh.PullToRefreshBox
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -47,6 +48,8 @@ fun HomeScreen(
     val savedArticles by viewModel.savedArticles.collectAsStateWithLifecycle()
     val state = viewModel.state
 
+    val isRefreshing = articles.loadState.refresh is LoadState.Loading || state.isLoading
+
     Scaffold(
         topBar = {
             if (state.isSearchWidgetOpened) {
@@ -68,10 +71,15 @@ fun HomeScreen(
             }
         }
     ) { paddingValues ->
-        Box(
+        PullToRefreshBox(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(paddingValues)
+                .padding(paddingValues),
+            isRefreshing = isRefreshing,
+            onRefresh = {
+                articles.refresh()
+                viewModel.refreshAll()
+            }
         ) {
             LazyColumn(
                 modifier = Modifier.fillMaxSize(),
@@ -94,7 +102,7 @@ fun HomeScreen(
                         }
                     }
 
-                    if (state.isLoading) {
+                    if (state.isLoading && !isRefreshing) {
                         item {
                             Box(Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
                                 CircularProgressIndicator()
