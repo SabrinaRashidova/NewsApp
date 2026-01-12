@@ -1,6 +1,5 @@
 
-📰 Daily News App
-A modern, high-performance Android news application built with Jetpack Compose and Clean Architecture. This app fetches real-time news using the NewsAPI, supporting category filtering, keyword search, and offline bookmarks.
+
 
  Features:
  ---
